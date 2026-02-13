@@ -353,3 +353,45 @@
     box-shadow: 0px 4px 4px 0px #00000040;
     border-radius: 10px;
 }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .app {
+        padding: 15px;
+    }
+
+    .app-title {
+        font-size: 24px;
+    }
+
+    .top-section {
+        flex-direction: column;
+        gap: 20px;
+        min-height: auto;
+        padding: 15px;
+    }
+
+    .bottom-section {
+        flex-direction: column;
+        margin-top: 25px;
+    }
+
+    .balance-card {
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .section-title {
+        font-size: 22px;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        width: 90%;
+        padding: 20px;
+    }
+}

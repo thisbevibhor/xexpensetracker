@@ -1,17 +1,35 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import BalanceCard from './components/BalanceCard'
 import Modal from './components/Modal'
 import AddBalanceForm from './components/AddBalanceForm'
 import AddExpenseForm from './components/AddExpenseForm'
 import TransactionList from './components/TransactionList'
+import ExpensePieChart from './components/ExpensePieChart'
+import TopExpensesChart from './components/TopExpensesChart'
 
 function App() {
-  const [balance, setBalance] = useState(5000);
-  const [expenses, setExpenses] = useState([]);
+  // Load from localStorage, or use defaults
+  const [balance, setBalance] = useState(() => {
+    const saved = localStorage.getItem('balance')
+    return saved !== null ? JSON.parse(saved) : 5000
+  });
+  const [expenses, setExpenses] = useState(() => {
+    const saved = localStorage.getItem('expenses')
+    return saved ? JSON.parse(saved) : []
+  });
   const [showAddBalance, setShowAddBalance] = useState(false);
   const [showAddExpense, setShowAddExpense] = useState(false);
-  const [editingExpense, setEditingExpense] = useState(null);  // Track which expense is being edited
+  const [editingExpense, setEditingExpense] = useState(null);
+
+  // Save to localStorage whenever balance or expenses change
+  useEffect(() => {
+    localStorage.setItem('balance', JSON.stringify(balance))
+  }, [balance])
+
+  useEffect(() => {
+    localStorage.setItem('expenses', JSON.stringify(expenses))
+  }, [expenses])
 
   const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
 
@@ -75,7 +93,7 @@ function App() {
 
         <BalanceCard label="Expenses" amount={totalExpenses} amountClass="expense-amount" buttonText="+ Add Expense" btnClass="btn-red" onButtonClick={() => setShowAddExpense(true)} />
         <div className="chart-section">
-          <p>Pie Chart</p>
+          <ExpensePieChart expenses={expenses} />
         </div>
       </div>
 
@@ -86,8 +104,9 @@ function App() {
           onDelete={handleDeleteExpense}
           onEdit={handleEditExpense}
         />
-        <div className="chart-section">
-          <p>Bar Chart</p>
+        <div className="chart-section chart-section-bottom">
+          <h3 className="section-title">Top Expenses</h3>
+          <TopExpensesChart expenses={expenses} />
         </div>
       </div>
 
